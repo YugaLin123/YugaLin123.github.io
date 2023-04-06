@@ -1,13 +1,20 @@
 
 import { ElMessage } from 'element-plus'
 
+const msg = (type, message) =>  {
+  ElMessage({
+    showClose: true,
+    message: message,
+    center: true,
+    type: type,
+    duration: 10000,
+  })
+}
 
 const PUBLIC_KEY = 'BNookoBZ5lB6glB0aeijbFNe6sGLX8Vsw-QK0U5XJfHiUhb18pQ0KqluHJ9Vmgsl19tsgO3nHPMZavhhEuq9oPk'
 // const PRIVATE_KEY = 'cbVY2q0s0eXCVB3wNNtfJjWRtTmfJFPfNrcuWGR6_JI'
 const NOTIFICATION_USABILITY = 'serviceWorker' in navigator && 'PushManager' in window
 const init = () => {
-  console.log('serviceWorker in navigator')
-  console.log('serviceWorker' in navigator)
   if (!NOTIFICATION_USABILITY) {
     console.log('Service Worker and Push is supported')
     // Disable subscribe button when user device is not support
@@ -158,14 +165,4 @@ export const displayNotification = (param, type = '') => {
       reg.showNotification(options.title, options)
     })
   }
-}
-
-const msg = (type='', message) =>  {
-  ElMessage({
-    showClose: true,
-    message: message,
-    center: true,
-    type: type,
-    duration: 10000,
-  })
 }

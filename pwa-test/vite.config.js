@@ -7,6 +7,6 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     https: false,
-    base:'/YugaLin123.github.io/pwa-test/'   // 对应GitHub项目名称
+    base:'yugalin123.github.io/'   // 对应GitHub项目名称
   }
 })
