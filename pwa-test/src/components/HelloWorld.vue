@@ -1,37 +1,58 @@
-<script setup>
-import { ref } from 'vue'
 
-defineProps({
-  msg: String,
-})
-
-const count = ref(0)
-</script>
 
 <template>
-  <h1>{{ msg }}</h1>
+  <h1> pwa </h1>
+  <el-button :plain="true" @click="openCenter">Show message</el-button>
+  <el-button :plain="true" @click="sendNotification">傳送通知</el-button>
 
-  <div class="card">
-    <button type="button" @click="count++">count is {{ count }}</button>
-    <p>
-      Edit
-      <code>components/HelloWorld.vue</code> to test HMR
-    </p>
-  </div>
-
-  <p>
-    Check out
-    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
-      >create-vue</a
-    >, the official Vue + Vite starter
-  </p>
-  <p>
-    Install
-    <a href="https://github.com/vuejs/language-tools" target="_blank">Volar</a>
-    in your IDE for a better DX
-  </p>
-  <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
+  
 </template>
+<script>
+// import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import { displayNotification } from '../registerServiceWorker.js'
+
+export default {
+  name: 'view-hello',
+  components: {
+  },
+  setup () {
+    const openCenter = () => {
+      ElMessage({
+        showClose: true,
+        message: 'Centered text',
+        center: true,
+      })
+    }
+    const sendNotification = () => {
+      const options = {
+        icon: '/img/icons/android-chrome-512x512.png',
+        body: 'OPEN WEBSITE222',
+        data: {
+          link: 'https://www.google.com/',
+        },
+        actions: [
+          {
+            action: 'yes',
+            title: '同意',
+          },
+          {
+            action: 'no',
+            title: '拒絕',
+          },
+        ],
+      }
+      // displayNotification('message', options)
+      displayNotification(options, 'action')
+    }
+    return {
+      openCenter,
+      sendNotification,
+    }
+    
+  },
+}
+</script>
 
 <style scoped>
 .read-the-docs {
