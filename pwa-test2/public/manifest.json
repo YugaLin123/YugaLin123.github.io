@@ -3,21 +3,21 @@
   "background_color": "#2196f3",
   "display": "standalone",
   "scope": "/",
-  "short_name": "CKedit!",
-  "name": "CKedit!",
+  "short_name": "PWATEST!",
+  "name": "PWATEST!",
   "icons": [
     {
-      "src": "/images/icons8-gas-48.png",
+      "src": "/PWA4/images/icons8-gas-48.png",
       "type": "image/png",
       "sizes": "48x48"
     },
     {
-      "src": "/images/icons8-gas-96.png",
+      "src": "/PWA4/images/icons8-gas-96.png",
       "type": "image/png",
       "sizes": "96x96"
     },
     {
-      "src": "/images/144x144.png",
+      "src": "/PWA4/images/144x144.png",
       "type": "image/png",
       "sizes": "144x144"
     }

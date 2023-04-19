@@ -16,6 +16,7 @@ git commit -m 'deploy'
 
 # 如果你要部署在 https://<USERNAME>.github.io
 git push -f git@github.com:yugalin123/yugalin123.github.io.git master
+# git push -f git@github.com:yugalin123/yugalin123.github.io/pwa-test.git master
 
 # 如果你要部署在 https://<USERNAME>.github.io/<REPO>
 # git push -f git@github.com:yugalin123/pwa-test.git master:gh-pages
