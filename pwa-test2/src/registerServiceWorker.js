@@ -1,7 +1,48 @@
 
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { initializeApp } from "firebase/app";
-import { getMessaging, getToken } from "firebase/messaging";
+import { getMessaging, onMessage } from "firebase/messaging";
+
+
+// Initialize the Firebase app in the service worker by passing in
+// your app's Firebase config object.
+// https://firebase.google.com/docs/web/setup#config-object
+const firebaseApp = initializeApp({
+  apiKey: "AIzaSyDEYWHma9rEroGOs5XYe8gZaDax8TIWRMo",
+  authDomain: "test-58de1.firebaseapp.com",
+  databaseURL: "https://test-58de1-default-rtdb.firebaseio.com",
+  projectId: "test-58de1",
+  storageBucket: "test-58de1.appspot.com",
+  messagingSenderId: "439805881996",
+  appId: "1:439805881996:web:41a120bee954577e1895a9"
+});
+
+// Retrieve an instance of Firebase Messaging so that it can handle background
+// messages.
+const messaging = getMessaging(firebaseApp);
+//const VAPID_KEY = 'BCn-idO9957h3uKL4NDyjLZgm8Xh9_wWFAu0oQEgiDwXzZpv4oui3Iw3MTZd7T2iUZzarv_H-rRZZwlAHkVu0bo'
+
+// getToken(messaging, { vapidKey: VAPID_KEY }).then((currentToken) => {
+//   console.log('getToken-reg')
+//   console.log(currentToken)
+//   if (currentToken) {
+//     // 將token發送到您的服務器並在必要時更新 UI 
+//     // ...
+//   } else {
+//     // 顯示權限請求 UI
+//     console.log('沒有可用的註冊token。請求許可生成一個');
+//     // ...
+//   }
+// }).catch((err) => {
+//   console.log('檢索token時出錯', err);
+//   // ...
+// });
+
+onMessage(messaging, (payload) => {
+  console.log("Message received. ", payload);
+  // ...
+});
+
 
 /**
  * 提示訊息
@@ -14,26 +55,40 @@ const msg = (type = 'info' ,message) =>  {
   })
 }
 
-const PUBLIC_KEY = 'BIVbuJ7G107uwvslGvVgiTuDuihsLRQN6lkmZyUgGEw0kb5_vsvtoKY1syVt5iQrZMlsetzZOlQ_iIofLOM7stQ'
+const PUBLIC_KEY = 'BCn-idO9957h3uKL4NDyjLZgm8Xh9_wWFAu0oQEgiDwXzZpv4oui3Iw3MTZd7T2iUZzarv_H-rRZZwlAHkVu0bo'
 // const PRIVATE_KEY = 'cei7SaEYo7caT8AhmLYusTft1CZ105K5n7A5mD0pydg'
 const NOTIFICATION_USABILITY = 'serviceWorker' in navigator && 'PushManager' in window
 const API_HOST = 'https://us-central1-pwa-day08.cloudfunctions.net/api'
 
 
 export const init = () => {
+  //確認瀏覽器有開起通知功能
+
   msg('serviceWorker' in navigator ? 'success' : 'error', 'serviceWorker in navigator = ' + Boolean('serviceWorker' in navigator))
   msg('PushManager' in window ? 'success' : 'error','PushManager in window = ' + Boolean('PushManager' in window))
   if (!NOTIFICATION_USABILITY) {
     console.log('未支援訂閱')
     msg('error', '不支援Service Worker')
   } else {
+    navigator.serviceWorker.register('firebase-messaging-sw.js')
+    .then((reg) => {
+      console.log(reg)
+    })
+    .catch((error) => {
+      console.error('[catch]firebase-messaging-sw:', error);
+
+    })
     navigator.serviceWorker.register(`sw.js`)
       .then((reg) => {
         console.log('[Service Worker] 註冊成功. 範圍：' + reg.scope)
         msg('success', '[Service Worker] 註冊成功.')
         msg('info', '通知權限默認狀態:'+ Notification.permission)
-        console.log(reg)
+
         localStorage.setItem('reg', JSON.stringify(reg))
+        Notification.requestPermission(function (status) {
+          console.log('現在的權限狀態:', status)
+          msg(status === 'granted'? 'success' : 'error', '現在的權限狀態:'+ status)
+        })
         return reg.pushManager.getSubscription()
       })
       .then(subscription => {
@@ -42,9 +97,16 @@ export const init = () => {
         if (isSubscribed) {
           localStorage.setItem('subscription', JSON.stringify(subscription))
           console.log('已訂閱: 儲存訂閱資料')
+          // getToken(messaging, { vapidKey: VAPID_KEY }).then((currentToken) => {
+          //   console.log('getToken-reg')
+          //   console.log(currentToken)
+          // }).catch((err) => {
+          //   console.log('檢索token時出錯', err);
+          //   // ...
+          // });
         } else {
           console.log('未訂閱：訂閱詢問')
-          subscribe()
+          // subscribe()
         }
       })
       .catch(error => {
@@ -52,6 +114,7 @@ export const init = () => {
         console.error('[Service Worker] 註冊失敗.', error)
         msg('error', '[Service Worker] 註冊失敗.')
       })
+    
   }
 }
 const subscribe = () => {
@@ -170,6 +233,7 @@ const displayNotification = (param, type = '') => {
   }
 }
 export const sendNotification =  (param, type = '') => {
+  init()
   const notification = Notification.permission
   if(notification === 'denied') return
   else if(notification === 'granted') displayNotification(param, type)
@@ -180,42 +244,3 @@ export const sendNotification =  (param, type = '') => {
     })
   }
 }
-
-init()
-
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDEYWHma9rEroGOs5XYe8gZaDax8TIWRMo",
-  authDomain: "test-58de1.firebaseapp.com",
-  databaseURL: "https://test-58de1-default-rtdb.firebaseio.com",
-  projectId: "test-58de1",
-  storageBucket: "test-58de1.appspot.com",
-  messagingSenderId: "439805881996",
-  appId: "1:439805881996:web:41a120bee954577e1895a9"
-};
-const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
-
-
-getToken(messaging, { vapidKey: '<YOUR_PUBLIC_VAPID_KEY_HERE>' }).then((currentToken) => {
-  if (currentToken) {
-    // Send the token to your server and update the UI if necessary
-    // ...
-  } else {
-    // Show permission request UI
-    console.log('No registration token available. Request permission to generate one.');
-    // ...
-  }
-}).catch((err) => {
-  console.log('An error occurred while retrieving token. ', err);
-  // ...
-});
-
-// 監聽來自 Firebase Cloud Messaging 的訊息
-messaging.onBackgroundMessage((payload) => {
-  console.log("[firebase-messaging-sw.js] Received background message: ", payload);
-});

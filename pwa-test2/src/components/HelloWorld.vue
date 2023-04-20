@@ -9,7 +9,7 @@
 
 </template>
 <script>
-import { inject, ref } from 'vue'
+import { ref } from 'vue'
 import { sendNotification } from '../registerServiceWorker.js'
 
 export default {

@@ -8,5 +8,11 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     https: false,  // 对应GitHub项目名称
-  }
+  },
+  include: [
+    "src/**/*.d.ts",
+    "src/**/*.js",
+    "src/**/*.svelte",
+    "src/firebase-messaging-sw.js"
+  ]
 })
