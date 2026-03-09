@@ -1,0 +1,9 @@
+{
+  "singleQuote": true,
+  "semi": false,
+  "proseWrap": "preserve",
+  "bracketSameLine": false,
+  "vueIndentScriptAndStyle": true,
+  "arrowParens": "avoid",
+  "printWidth": 150
+}

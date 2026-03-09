@@ -1,30 +1,43 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="app">
+    <ViewHeader class="main-header" />
+    <div class="main-container">
+      <router-view class="container"></router-view>
+    </div>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+<script setup>
+  import ViewHeader from '@/components/Header/index.vue'
+</script>
+
+<style lang="scss" scoped>
+  .app {
+    .main-header {
+      height: var(--header-height);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 3;
+      background-color: #f8f8f8;
+      box-shadow: 0 3px 6px #45454557;
+    }
+    .main-container {
+      margin-top: calc(var(--header-height) + 40px);
+      width: 100%;
+      max-width: 1200px;
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-right: auto;
+      margin-left: auto;
+      @media (min-width: 768px) {
+        max-width: calc(100% - 60px);
+      }
+      @media (min-width: 576px) {
+        max-width: calc(100% - 40px);
+      }
+    }
+  }
 </style>
